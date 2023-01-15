@@ -18,19 +18,19 @@ public class ViewUser {
         Commands com = Commands.NONE;
 
         while (true) {
-            String command = prompt("Введите команду: ");
+            String command = prompt("Enter command: ");
             com = Commands.valueOf(command.toUpperCase());
             if (com == Commands.EXIT) return;
             try {
                 switch (com) {
                     case CREATE:
-                        String firstName = prompt("Имя: ");
-                        String lastName = prompt("Фамилия: ");
-                        String phone = prompt("Номер телефона: ");
+                        String firstName = prompt("First name: ");
+                        String lastName = prompt("Last name: ");
+                        String phone = prompt("Phone number: ");
                         userController.saveUser(new User(firstName, lastName, phone));
                         break;
                     case READ:
-                        String id = prompt("Идентификатор пользователя: ");
+                        String id = prompt("ID: ");
                         User user = userController.readUser(id);
                         System.out.println(user);
                         break;
@@ -39,13 +39,25 @@ public class ViewUser {
                         lst.forEach(i -> System.out.println(i + "\n"));
                         break;
                     case UPDATE:
-                        String numId = prompt("Какой контакт редактировать? Введите номер ID: ");
+                        String numId = prompt("Input ID of contact to update: ");
                         userController.idPresenceValidation(numId);
                         userController.updateUser(numId, createAGuy());
                         break;
+                    case DELETE:
+                        String delId = prompt("Input ID of contact to delete: ");
+                        userController.idPresenceValidation(delId);
+                        userController.deleteUser(delId);
+                        break;
+                    case SAVE:
+                        String choice = prompt("Choose a save format (old / new): ");
+                        userController.formatChoiceValidation(choice);
+                        String fName = prompt("Enter name for save file (without file extension): ") + ".txt";
+                        userController.saveFile(choice, fName);
+                        break;
+
                 }
             } catch (Exception e) {
-                System.out.println("Oopsie!\n"+ e.getMessage()); ;
+                System.out.println("Oopsie!\n"+ e.getMessage());
             }
         }
     }
@@ -57,9 +69,9 @@ public class ViewUser {
     }
 
     private User createAGuy() {
-        String firstName = prompt("Имя: ");
-        String lastName = prompt("Фамилия: ");
-        String phone = prompt("Номер телефона: ");
+        String firstName = prompt("First name: ");
+        String lastName = prompt("Last name: ");
+        String phone = prompt("Phone number: ");
         User newGuy = new User(firstName, lastName, phone);
         return newGuy;
     }

@@ -50,11 +50,54 @@ public class RepositoryFile implements Repository {
         writeDown(users);
     }
 
-    private void writeDown (List<User> users){
+    @Override
+    public void deleteUser(String id) {
+        List<User> users = getAllUsers();
+        int targetIndex = 0;
+        for (User user: users) {
+            if (user.getId().equals(id)) {
+                targetIndex = users.indexOf(user);
+            }
+        }
+        users.remove(targetIndex);
+        writeDown(users);
+    }
+
+    @Override
+    public void saveOldFormat(String fName) {
+        List<User> users = getAllUsers();
+        List<String> lines = oldFormatLines(users);
+        fileOperation.saveFile(lines, fName);
+    }
+
+    @Override
+    public void saveNewFormat(String fName) {
+        List<User> users = getAllUsers();
+        List<String> lines = newFormatLines(users);
+        fileOperation.saveFile(lines, fName);
+    }
+
+    private void writeDown (List<User> users) {
         List<String> lines = new ArrayList<>();
         for (User item: users) {
             lines.add(mapper.map(item));
         }
         fileOperation.saveAllLines(lines);
+    }
+
+    private List<String> oldFormatLines(List<User> users) {
+        List<String> lines = new ArrayList<>();
+        for (User item: users) {
+            lines.add(mapper.map(item));
+        }
+        return lines;
+    }
+
+    private List<String> newFormatLines(List<User> users) {
+        List<String> lines = new ArrayList<>();
+        for (User item: users) {
+            lines.add(mapper.newMap(item));
+        }
+        return lines;
     }
 }

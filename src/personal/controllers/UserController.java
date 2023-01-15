@@ -41,6 +41,10 @@ public class UserController {
         repository.updateUser(newGuy);
     }
 
+    public void deleteUser(String id) throws Exception {
+        repository.deleteUser(id);
+    }
+
     private void validateUser(User user) throws Exception {
         if (user.getFirstName().contains(" "))
             throw new Exception("User name has unacceptable characters");
@@ -61,5 +65,20 @@ public class UserController {
                return;
         }
         throw new Exception("No such ID here");
+    }
+
+    public void saveFile(String choice, String fname) {
+        if (choice.equalsIgnoreCase("old")) {
+            repository.saveOldFormat(fname);
+        } else {
+            repository.saveNewFormat(fname);
+        }
+    }
+
+    public void formatChoiceValidation(String choice) throws Exception{
+        if (choice.equalsIgnoreCase("old") || choice.equalsIgnoreCase("new")) {
+            return;
+        }
+        throw new Exception("Unacceptable choice");
     }
 }

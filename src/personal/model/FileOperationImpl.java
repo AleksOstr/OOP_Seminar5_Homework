@@ -59,4 +59,17 @@ public class FileOperationImpl implements FileOperation {
             System.out.println(ex.getMessage());
         }
     }
+
+    @Override
+    public void saveFile(List<String> lines, String fName) {
+        try (FileWriter writer = new FileWriter(fName, false)) {
+            for (String line: lines) {
+                writer.write(line);
+                writer.append('\n');
+            }
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }
